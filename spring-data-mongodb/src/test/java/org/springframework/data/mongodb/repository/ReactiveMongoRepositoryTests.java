@@ -23,6 +23,7 @@ import static org.springframework.data.mongodb.test.util.Assertions.assertThat;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.test.util.ReactiveMongoClientClosingTestConfiguration;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -53,7 +54,6 @@ import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResult;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
-import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
 import org.springframework.data.mongodb.core.CollectionOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -94,7 +94,7 @@ class ReactiveMongoRepositoryTests {
 	private QPerson person = QPerson.person;
 
 	@Configuration
-	static class Config extends AbstractReactiveMongoConfiguration {
+	static class Config extends ReactiveMongoClientClosingTestConfiguration {
 
 		@Bean
 		@Override
