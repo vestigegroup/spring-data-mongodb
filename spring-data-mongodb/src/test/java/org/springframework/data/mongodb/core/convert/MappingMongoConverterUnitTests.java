@@ -30,11 +30,11 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import org.assertj.core.api.DateAssert;
 import org.bson.types.Binary;
 import org.bson.types.Code;
 import org.bson.types.Decimal128;
 import org.bson.types.ObjectId;
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -141,34 +141,6 @@ class MappingMongoConverterUnitTests {
 		assertThat(document.get("street").toString()).isEqualTo("Broadway");
 	}
 
-	@Test
-	void convertsJodaTimeTypesCorrectly() {
-
-		converter = new MappingMongoConverter(resolver, mappingContext);
-		converter.afterPropertiesSet();
-
-		Person person = new Person();
-		person.birthDate = new LocalDate();
-
-		org.bson.Document document = new org.bson.Document();
-		converter.write(person, document);
-
-		assertThat(document.get("birthDate")).isInstanceOf(Date.class);
-
-		Person result = converter.read(Person.class, document);
-		assertThat(result.birthDate).isNotNull();
-	}
-
-	@Test
-	void convertsCustomTypeOnConvertToMongoType() {
-
-		converter = new MappingMongoConverter(resolver, mappingContext);
-		converter.afterPropertiesSet();
-
-		LocalDate date = new LocalDate();
-		converter.convertToMongoType(date);
-	}
-
 	@Test // DATAMONGO-130
 	void writesMapTypeCorrectly() {
 
@@ -194,7 +166,7 @@ class MappingMongoConverterUnitTests {
 	void usesDocumentsStoredTypeIfSubtypeOfRequest() {
 
 		org.bson.Document document = new org.bson.Document();
-		document.put("birthDate", new LocalDate());
+		document.put("birthDate", new Date());
 		document.put(DefaultMongoTypeMapper.DEFAULT_TYPE_KEY, Person.class.getName());
 
 		assertThat(converter.read(Contact.class, document)).isInstanceOf(Person.class);
@@ -204,7 +176,7 @@ class MappingMongoConverterUnitTests {
 	void ignoresDocumentsStoredTypeIfCompletelyDifferentTypeRequested() {
 
 		org.bson.Document document = new org.bson.Document();
-		document.put("birthDate", new LocalDate());
+		document.put("birthDate", new Date());
 		document.put(DefaultMongoTypeMapper.DEFAULT_TYPE_KEY, Person.class.getName());
 
 		assertThat(converter.read(BirthDateContainer.class, document)).isInstanceOf(BirthDateContainer.class);
@@ -2660,7 +2632,7 @@ class MappingMongoConverterUnitTests {
 
 		@Id String id;
 
-		LocalDate birthDate;
+		Date birthDate;
 
 		@Field("foo") String firstname;
 		String lastname;
@@ -2695,7 +2667,7 @@ class MappingMongoConverterUnitTests {
 	}
 
 	static class BirthDateContainer {
-		LocalDate birthDate;
+		Date birthDate;
 	}
 
 	static class BigDecimalContainer {

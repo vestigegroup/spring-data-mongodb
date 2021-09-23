@@ -144,11 +144,6 @@ class UnwrappedMongoPersistentProperty implements MongoPersistentProperty {
 	}
 
 	@Override
-	public Iterable<? extends TypeInformation<?>> getPersistentEntityTypes() {
-		return delegate.getPersistentEntityTypes();
-	}
-
-	@Override
 	public Iterable<? extends TypeInformation<?>> getPersistentEntityTypeInformation() {
 		return delegate.getPersistentEntityTypeInformation();
 	}
